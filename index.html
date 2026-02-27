@@ -5,14 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Abdulmoiz Portfolio</title>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
   <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.66/build/spline-viewer.js"></script>
 
   <style>
-    /* ADDED: Smooth scrolling for anchor links */
-    html { scroll-behavior: smooth; }
-    
-    * { margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif; }
-    body { background:#000; color:#fff; overflow-x:hidden; }
+    * { margin:0; padding:0; box-sizing:border-box; font-family: 'Poppins', sans-serif; }
+    body { background:#000; color:#fff; overflow:hidden; /* Prevent scrolling on main hero page */ }
 
     header {
       position:fixed;
@@ -20,7 +21,7 @@
       width:100%;
       backdrop-filter: blur(10px);
       background:rgba(0,0,0,0.4);
-      border-bottom:1px solid rgba(255,255,255,0.1);
+      border-bottom:1px solid rgba(255,255,255,0.05);
       z-index:50;
     }
 
@@ -33,10 +34,18 @@
       align-items:center;
     }
 
-    nav a { color:#ccc; margin-left:20px; text-decoration:none; }
-    nav a:hover { color:#fff; }
+    /* Make logo text bold and crisp */
+    .nav h2 { font-weight: 700; letter-spacing: 1px; }
 
-    section { padding:100px 20px; text-align:center; }
+    nav a { 
+      color:#aaa; 
+      margin-left:30px; 
+      text-decoration:none; 
+      font-size: 15px;
+      font-weight: 400;
+      transition: color 0.3s ease;
+    }
+    nav a:hover { color:#fff; }
 
     .hero {
       height:100vh;
@@ -44,7 +53,7 @@
       display:flex;
       justify-content:center;
       align-items:center;
-      overflow:hidden;
+      text-align:center;
     }
 
     spline-viewer {
@@ -54,38 +63,49 @@
       height:100%;
     }
 
-    /* Added pointer-events: none to hero-content so it doesn't block 3D interactions */
     .hero-content {
       position:relative;
       z-index:2;
       opacity:0;
       transform:translateY(40px);
-      transition:all 1s ease;
+      transition:all 1s cubic-bezier(0.16, 1, 0.3, 1); /* Smoother fade-in */
       pointer-events: none; 
+      padding: 0 20px;
     }
 
-    /* Re-enable pointer events on buttons so they remain clickable */
-    .hero-content .btns {
-      pointer-events: auto;
-    }
+    .hero-content .btns { pointer-events: auto; }
 
     .hero-content.show {
       opacity:1;
       transform:translateY(0);
     }
 
-    h1 { font-size:56px; }
-    p { color:#bbb; margin-top:20px; }
+    h1 { font-size:64px; font-weight: 700; line-height: 1.1; margin-bottom: 10px; }
+    p { color:#bbb; font-size: 18px; font-weight: 300; max-width: 600px; margin: 0 auto; line-height: 1.6; }
 
-    .btns { margin-top:30px; }
-    button {
-      padding:12px 24px;
-      margin:5px;
-      border-radius:12px;
-      border:none;
-      cursor:pointer;
-      font-weight:bold;
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+      h1 { font-size: 42px; }
+      p { font-size: 16px; }
+      .nav { flex-direction: column; gap: 15px; }
+      nav a { margin: 0 10px; }
+      body { overflow-y: auto; } /* Allow scroll on mobile if needed */
     }
+
+    .btns { margin-top:40px; display: flex; gap: 15px; justify-content: center; }
+    
+    .btn {
+      display: inline-block;
+      padding:14px 28px;
+      border-radius:30px; /* Pill-shaped buttons for modern look */
+      text-decoration: none;
+      font-weight:600;
+      font-size: 15px;
+      transition: all 0.3s ease;
+    }
+    
+    .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(255,255,255,0.1); }
+    .btn:active { transform: translateY(0); }
 
     .primary { background:#fff; color:#000; }
     .outline { background:transparent; border:1px solid #fff; color:#fff; }
@@ -103,36 +123,44 @@
     }
 
     .spinner {
-      width:50px;
-      height:50px;
-      border:3px solid #fff;
-      border-top-color:transparent;
+      width:40px;
+      height:40px;
+      border:3px solid rgba(255,255,255,0.2);
+      border-top-color:#fff;
       border-radius:50%;
       animation:spin 1s linear infinite;
     }
 
     @keyframes spin { to { transform:rotate(360deg);} }
-
-    /* ADDED: visibility: hidden so the loader is entirely removed from the accessibility tree once faded */
     .hidden { opacity:0; visibility: hidden; pointer-events:none; }
-
-    footer { border-top:1px solid rgba(255,255,255,0.1); padding:20px; color:#777; text-align: center; }
+    
+    /* Footer pinned to bottom of screen */
+    footer { 
+      position: absolute; 
+      bottom: 0; 
+      width: 100%; 
+      padding:20px; 
+      color:#555; 
+      text-align: center; 
+      font-size: 14px; 
+      z-index: 10;
+      pointer-events: none;
+    }
   </style>
 </head>
 <body>
 
 <div id="loader" class="loader">
   <div class="spinner"></div>
-  <p style="margin-top:15px">Loading Experience...</p>
 </div>
 
 <header>
   <div class="nav">
     <h2>Abdulmoiz</h2>
     <nav>
-      <a href="#about">About</a>
-      <a href="#projects">Projects</a>
-      <a href="#contact">Contact</a>
+      <a href="about.html" target="_blank">About</a>
+      <a href="projects.html" target="_blank">Projects</a>
+      <a href="contact.html" target="_blank">Contact</a>
     </nav>
   </div>
 </header>
@@ -144,27 +172,12 @@
 
   <div id="heroContent" class="hero-content">
     <h1>Hi, I'm Abdulmoiz</h1>
-    <p>Computer Science Student | Web Developer | Building Creative Digital Experiences</p>
+    <p>Computer Science Student & Web Developer focused on building clean, modern, and interactive digital experiences.</p>
     <div class="btns">
-      <a href="#projects"><button class="primary">View Projects</button></a>
-      <a href="#contact"><button class="outline">Contact Me</button></a>
+      <a href="projects.html" target="_blank" class="btn primary">View My Work</a>
+      <a href="contact.html" target="_blank" class="btn outline">Get In Touch</a>
     </div>
   </div>
-</section>
-
-<section id="about">
-  <h2>About Me</h2>
-  <p>Passionate CS student focused on modern web development and creative interfaces.</p>
-</section>
-
-<section id="projects">
-  <h2>Projects</h2>
-  <p>Project showcase coming soon.</p>
-</section>
-
-<section id="contact">
-  <h2>Contact</h2>
-  <p>Let's work together.</p>
 </section>
 
 <footer>
@@ -176,16 +189,10 @@
   const hero = document.getElementById("heroContent");
   const spline = document.getElementById("spline");
 
-  // Basic runtime tests
-  console.assert(loader !== null, "Loader element should exist");
-  console.assert(hero !== null, "Hero content should exist");
-  
-  // Wait for module to initialize instead of failing synchronously
   customElements.whenDefined('spline-viewer').then(() => {
-    console.log("Spline viewer component defined.");
+    console.log("Spline viewer ready.");
   });
 
-  // Function to reveal the site
   function revealSite() {
     if (!loader.classList.contains("hidden")) {
       loader.classList.add("hidden");
@@ -193,17 +200,14 @@
     }
   }
 
-  // Event listener for when the Spline scene successfully loads
   spline.addEventListener("load", () => {
-    setTimeout(revealSite, 600); // Slight delay for smoothness
+    setTimeout(revealSite, 600); 
   });
 
-  // FALLBACK: If Spline takes longer than 4 seconds (or fails), show the site anyway
   setTimeout(() => {
     revealSite();
   }, 4000);
 
-  // Set Current Year dynamically
   document.getElementById("year").textContent = new Date().getFullYear();
 </script>
 
